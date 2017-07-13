@@ -866,6 +866,14 @@ var encodeCanonicalTests = []struct {
 }
 
 func TestEncodeCanonicalStruct(t *testing.T) {
+	// first, encode non-canonically in order to populate cache, and make sure that later marshalling canonically succeeds
+	for _, tt := range encodeCanonicalTests {
+		_, err := Marshal(tt.in)
+		if err != nil {
+			t.Errorf("Marshal(%#v) = error(%v)", tt.in, err)
+		}
+	}
+
 	for _, tt := range encodeCanonicalTests {
 		b, err := MarshalCanonical(tt.in)
 		if err != nil {
